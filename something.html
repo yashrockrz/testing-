@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cat or Dog Identifier</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+        }
+        .upload-container {
+            border: 2px dashed #ccc;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .file-input {
+            margin-bottom: 20px;
+        }
+        .submit-btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .submit-btn:hover {
+            background-color: #45a049;
+        }
+        .preview {
+            margin-top: 20px;
+        }
+        .preview img {
+            max-width: 100%;
+            max-height: 300px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Identify: Cat or Dog?</h1>
+    
+    <div class="upload-container">
+        <form id="uploadForm">
+            <div class="file-input">
+                <input type="file" id="imageInput" accept="image/*">
+            </div>
+            <button type="submit" class="submit-btn">Identify</button>
+        </form>
+        
+        <div class="preview">
+            <img id="imagePreview" src="/api/placeholder/400/300" alt="Image preview">
+            <p id="result"></p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('uploadForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const fileInput = document.getElementById('imageInput');
+            const preview = document.getElementById('imagePreview');
+            const result = document.getElementById('result');
+            
+            if (fileInput.files && fileInput.files[0]) {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                    
+                    // Simulate identification (in a real app, this would call an API)
+                    setTimeout(() => {
+                        const randomResult = Math.random() > 0.5 ? 'Cat' : 'Dog';
+                        result.textContent = `Identified as: ${randomResult}`;
+                    }, 1000);
+                }
+                
+                reader.readAsDataURL(fileInput.files[0]);
+            } else {
+                result.textContent = 'Please select an image file first.';
+            }
+        });
+        
+        // Preview image when selected
+        document.getElementById('imageInput').addEventListener('change', function() {
+            const preview = document.getElementById('imagePreview');
+            const result = document.getElementById('result');
+            result.textContent = '';
+            
+            if (this.files && this.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                }
+                reader.readAsDataURL(this.files[0]);
+            } else {
+                preview.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
